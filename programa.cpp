@@ -40,35 +40,35 @@ int main() {
     vector<Studentas> visiStudentai;
     string eilute;
 
-    cout<<"Pasirinkti duomenų įkelimo būdą:\n";
-    cout<<"1. Įvesti studentų duomenis rankiniu būdu\n";
-    cout<<"2. Nuskaityti studentų duomenis iš pasirinkto failo\n:";
-    cout<<"Jūsų pasirinkimas:";
+    cout<< "Pasirinkti duomenų įkelimo būdą:\n";
+    cout<< "1. Įvesti studentų duomenis rankiniu būdu\n";
+    cout<< "2. Nuskaityti studentų duomenis iš pasirinkto failo\n:";
+    cout<< "Jūsų pasirinkimas:";
     int veiksmas;
-    cin>>veiksmas;
+    cin >> veiksmas;
     cin.ignore();
 
-    if(veiksmas == 2){
+    if(veiksmas == 2) {
         string failoVardas;
-        cout<<"Įveskite norimo failo pavadinimą:";
+        cout << "Įveskite norimo failo pavadinimą:";
         getline(cin, failoVardas);
 
         ifstream in(failoVardas);
-        if(!in){
-            cerr <<"Nepavyko atidaryti failo:"<<failoVardas<<endl;
+        if (!in) {
+            cerr << "Nepavyko atidaryti failo:" << failoVardas << endl;
             return 1;
         }
 
     getline(in, eilute);
-        while(getline(in,eilute)){
+        while(getline(in,eilute)) {
             if (eilute.empty()) continue;
 
             stringstream ss(eilute);
             Studentas s;
-            ss>>s.vardas>>s.pavarde;
+            ss >> s.vardas >> s.pavarde;
             vector<int> paz;
             int sk;
-            while (ss>>sk) paz.push_back(sk);
+            while (ss >> sk) paz.push_back(sk);
 
             if(paz.empty()) continue;
 
@@ -80,48 +80,48 @@ int main() {
         }
         in.close();
     }
-    else{
-        cin.ignore();
+    else {
     while(true) {
         Studentas s;
-        cout<<"\n---Naujas studentas ---\n";
-        cout<<"Įveskite studento vardą (tuščia eilutė reiškia studentų sąrašo pabaigą):";
+        cout << "\n---Naujas studentas ---\n";
+        cout << "Įveskite studento vardą (tuščia eilutė reiškia studentų sąrašo pabaigą):";
         getline(cin, eilute);
         if (eilute.empty()) break;
         s.vardas = eilute;
 
-        cout<<"Įveskite studento pavardę:";
+        cout << "Įveskite studento pavardę:";
         getline(cin, s.pavarde);
+        
+        cout << "Pasirinkti balų įvedimo būdą:\n";
+        cout << "1. Įvesti balus rankiniu būdu\n";
+        cout << "2. Sugeneruoti balus atsitiktinai\n";
+        cout << "Jūsų pasirinkimas:";
+        getline(cin, eilute);
 
         int pasirinkimas;
-        cout<<"Pasirinkti balų įvedimo būdą:";
-        cout<<" 1. Įvesti balus rankiniu būdu,";
-        cout<<" 2. Sugeneruoti balus atsitiktinai.";
-        cout<<" Jūsų pasirinkimas:";
-        getline(cin, eilute);
         stringstream ss(eilute);
-        ss>>pasirinkimas;
+        ss >> pasirinkimas;
 
-        if (pasirinkimas == 1){
-            cout<<"Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
-            while(true){
+        if (pasirinkimas == 1) {
+            cout << "Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
+            while(true) {
                 getline(cin, eilute);
                 if(eilute.empty()) break;
                 s.nd.push_back(stoi(eilute));
        }
-cout<<"Įveskite egzamino rezultatą:";
+cout << "Įveskite egzamino rezultatą:";
 getline(cin, eilute);
 s.egz = stoi(eilute);
         }
-        else if (pasirinkimas == 2){
-            cout<<"Įveskite namų darbų kiekį:";
+        else if (pasirinkimas == 2) {
+            cout << "Įveskite namų darbų kiekį:";
             getline(cin, eilute);
             int ndKiek = stoi(eilute);
             for (int i = 0; i<ndKiek; i++)
                 s.nd.push_back(rand()%11);
             s.egz =rand()%11;
         }
-        else{
+        else {
             cout << "Netinkamas pasirinkimas. Studentas nebus įtrauktas";
             continue;
         }
@@ -133,21 +133,21 @@ visiStudentai.push_back(s);
         return a.pavarde < b.pavarde;  
      return a.vardas < b.vardas;
       });
-cout<< "\nRezultatai:\n";
-cout<< left<< setw(15) <<"Vardas"
-     << setw(15) <<"Pavardė"
-     << setw(20) <<"Galutinis(Vid.)"
-     << setw(20) <<"Galutinis(Med.)"<<endl;
-cout << string(70, '-')<<endl;
+cout << "\nRezultatai:\n";
+cout << left<< setw(15) << "Vardas"
+     << setw(15) << "Pavardė"
+     << setw(20) << "Galutinis(Vid.)"
+     << setw(20) << "Galutinis(Med.)" << endl;
+cout << string(70, '-') << endl;
 
 for (const Studentas &s : visiStudentai) {
     vector<int> viskas = s.nd;
     viskas.push_back(s.egz);
-    cout<<left<<setw(15)<<s.vardas
-    <<setw(15)<<s.pavarde
-    <<setw(20) <<fixed<<setprecision(2)<<skaicVid(viskas)
-    <<setw(20) <<fixed<<setprecision(2) <<skaicMediana(viskas)
-    <<endl;
+    cout << left << setw(15) << s.vardas
+    << setw(15) << s.pavarde
+    << setw(20) << fixed << setprecision(2) << skaicVid(viskas)
+    << setw(20) << fixed << setprecision(2) << skaicMediana(viskas)
+    << endl;
 }
 return 0;
 }
