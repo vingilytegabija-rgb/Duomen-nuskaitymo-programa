@@ -129,7 +129,9 @@ visiStudentai.push_back(s);
     }
 }
  sort(visiStudentai.begin(), visiStudentai.end(), [](const Studentas &a, const Studentas &b) {
-        return a.vardas < b.vardas;
+     if (a.vardas == b.vardas)
+        return a.pavarde < b.pavarde;  
+     return a.vardas < b.vardas;
       });
 cout<< "\nRezultatai:\n";
 cout<< left<< setw(12) <<"Vardas"
