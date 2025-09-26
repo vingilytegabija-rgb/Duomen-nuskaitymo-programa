@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include<ctime>
+#include<fstream>
 
 using namespace std;
 
@@ -35,13 +36,56 @@ double skaicMediana(vector<int> pazymiai) {
 }
     
 int main() {
+    srand((unsigned)time(0));
     vector<Studentas> visiStudentai;
     string eilute;
 
+    cout<<"Pasirinkti duomenų įkelimo būdą:\n";
+    cout<<"1. Įvesti studentų duomenis rankiniu būdu\n";
+    cout<<"2. Nuskaityti studentų duomenis iš pasirinkto failo\n:";
+    cout<<"Jūsų pasirinkimas:";
+    int veiksmas;
+    cin>>veiksmas;
+    cin.ignore();
+
+    if(veiksmas == 2){
+        string failoVardas;
+        cout<<"Įveskite norimo failo pavadinimą:";
+        getline(cin, failoVardas);
+
+        ifstream in(failoVardas);
+        if(!in){
+            cerr <<"Nepavyko atidaryti failo:"<<failoVardas<<endl;
+            return 1;
+        }
+
+    getline(in, eilute);
+        while(getline(in,eilute)){
+            if (eilute.empty()) continue;
+
+            stringstream ss(eilute);
+            Studentas s;
+            ss>>s.vardas>>s.pavarde;
+
+            vector<int> paz;
+            int sk;
+            while (ss>>sk) paz.push_back(sk);
+
+            if(paz.empty()) continue;
+
+            s.egz = paz.back();
+            paz.pop_back();
+            s.nd = paz;
+
+            visiStudentai.push_back(s);
+        }
+        in.close();
+    }
+    else{
+        cin.ignore();
     while(true) {
         Studentas s;
         cout<<"\n---Naujas studentas ---\n";
-
         cout<<"Įveskite studento vardą (tuščia eilutė reiškia studentų sąrašo pabaigą):";
         getline(cin, eilute);
         if (eilute.empty()) break;
@@ -69,36 +113,36 @@ int main() {
 cout<<"Įveskite egzamino rezultatą:";
 getline(cin, eilute);
 s.egz = stoi(eilute);
-s.nd.push_back(s.egz);
-        }else if (pasirinkimas == 2){
+        }
+        else if (pasirinkimas == 2){
             cout<<"Įveskite namų darbų kiekį:";
             getline(cin, eilute);
             int ndKiek = stoi(eilute);
             for (int i = 0; i<ndKiek; i++)
                 s.nd.push_back(rand()%11);
             s.egz =rand()%11;
-            s.nd.push_back(s.egz);
-        }else{
+        }
+        else{
             cout << "Netinkamas pasirinkimas. Studentas nebus įtrauktas";
             continue;
         }
 visiStudentai.push_back(s);
     }
-
+}
 cout<< "\nRezultatai:\n";
 cout<< left<< setw(12) <<"Vardas"
      << setw(12) <<"Pavardė"
      << setw(20) <<"Galutinis(Vid.)"
      << setw(20) <<"Galutinis(Med.)"<<endl;
-cout << "---------------------------------------------" << endl;
+cout << string(70, '-')<<endl;
 
-for (Studentas s: visiStudentai){
-    double galutinisVid = skaicVid(s.nd);
-    double galutinisMed = skaicMediana(s.nd);
+for (const Studentas &s : visiStudentai) {
+    vector<int> viskas = s.nd;
+    viskas.push_back(s.egz);
     cout<<left<<setw(12)<<s.vardas
     <<setw(12)<<s.pavarde
-    <<setw(20) <<fixed<<setprecision(2)<<galutinisVid
-    <<setw(20) <<fixed<<setprecision(2) <<galutinisMed
+    <<setw(20) <<fixed<<setprecision(2)<<skaicVid(viskas)
+    <<setw(20) <<fixed<<setprecision(2) <<skaicMediana(viskas)
     <<endl;
 }
 return 0;
