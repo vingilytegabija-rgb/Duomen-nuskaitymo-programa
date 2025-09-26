@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -19,6 +20,18 @@ double skaicVid(const vector<int>& pazymiai) {
     for (int p : pazymiai) suma+= p;
     return (double)suma/pazymiai.size();
 }
+
+double skaicMediana(vector<int> pazymiai) {
+    if (pazymiai.empty()) return 0;
+    sort(pazymiai.begin(), pazymiai.end());
+    int n = pazymiai.size();
+    if (n%2 == 0) {
+        return (pazymiai[n/2-1] +pazymiai[n/2]) / 2.0;
+    } else {
+        return pazymiai[n/2];
+    }
+}
+    
 int main() {
     vector<Studentas> visiStudentai;
     string eilute;
@@ -56,14 +69,18 @@ visiStudentai.push_back(s);
 cout<< "\nRezultatai:\n";
 cout<< left<< setw(12) <<"Vardas"
      << setw(12) <<"Pavardė"
-     << setw(20) <<"Galutinis(Vid.)"<<endl;
+     << setw(20) <<"Galutinis(Vid.)"
+     << setw(20) <<"Galutinis(Med.)"<<endl;
 cout << "---------------------------------------------" << endl;
 
 for (Studentas s: visiStudentai){
-    double galutinis = skaicVid(s.nd);
+    double galutinisVid = skaicVid(s.nd);
+    double galutinisMed = skaicMediana(s.nd);
     cout<<left<<setw(12)<<s.vardas
     <<setw(12)<<s.pavarde
-    <<setw(20) <<fixed<<setprecision(2)<<galutinis<<endl;
+    <<setw(20) <<fixed<<setprecision(2)<<galutinisVid
+    <<setw(20) <<fixed<<setprecision(2) <<galutinisMed
+    <<endl;
 }
 return 0;
 }
