@@ -66,7 +66,6 @@ int main() {
             stringstream ss(eilute);
             Studentas s;
             ss>>s.vardas>>s.pavarde;
-
             vector<int> paz;
             int sk;
             while (ss>>sk) paz.push_back(sk);
