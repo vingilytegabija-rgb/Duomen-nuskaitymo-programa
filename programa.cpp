@@ -4,6 +4,8 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <cstdlib>
+#include<ctime>
 
 using namespace std;
 
@@ -48,18 +50,38 @@ int main() {
         cout<<"Įveskite studento pavardę:";
         getline(cin, s.pavarde);
 
-    cout<<"Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
-    while(true){
+        int pasirinkimas;
+        cout<<"Pasirinkti balų įvedimo būdą:";
+        cout<<" 1. Įvesti balus rankiniu būdu,";
+        cout<<" 2. Sugeneruoti balus atsitiktinai.";
+        cout<<" Jūsų pasirinkimas:";
         getline(cin, eilute);
-        if(eilute.empty()) break;
-        s.nd.push_back(stoi(eilute));
-    }
+        stringstream ss(eilute);
+        ss>>pasirinkimas;
 
+        if (pasirinkimas == 1){
+            cout<<"Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
+            while(true){
+                getline(cin, eilute);
+                if(eilute.empty()) break;
+                s.nd.push_back(stoi(eilute));
+       }
 cout<<"Įveskite egzamino rezultatą:";
 getline(cin, eilute);
 s.egz = stoi(eilute);
-
 s.nd.push_back(s.egz);
+        }else if (pasirinkimas == 2){
+            cout<<"Įveskite namų darbų kiekį:";
+            getline(cin, eilute);
+            int ndKiek = stoi(eilute);
+            for (int i = 0; i<ndKiek; i++)
+                s.nd.push_back(rand()%11);
+            s.egz =rand()%11;
+            s.nd.push_back(s.egz);
+        }else{
+            cout << "Netinkamas pasirinkimas. Studentas nebus įtrauktas";
+            continue;
+        }
 visiStudentai.push_back(s);
     }
 
