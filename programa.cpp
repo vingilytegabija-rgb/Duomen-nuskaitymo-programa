@@ -128,6 +128,9 @@ s.egz = stoi(eilute);
 visiStudentai.push_back(s);
     }
 }
+ sort(visiStudentai.begin(), visiStudentai.end(), [](const Studentas &a, const Studentas &b) {
+        return a.vardas < b.vardas;
+      });
 cout<< "\nRezultatai:\n";
 cout<< left<< setw(12) <<"Vardas"
      << setw(12) <<"Pavardė"
