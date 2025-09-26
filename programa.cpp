@@ -48,14 +48,11 @@ int main() {
         cout<<"Įveskite studento pavardę:";
         getline(cin, s.pavarde);
 
-    cout<<"Įveskite namų darbų rezultatus(teigiami skaičiai rašomi be kablelių (formatas 4 5 2 0), baigiama su nuliu):";
-    string ndEilute;
-    getline(cin, ndEilute);
-    stringstream ss(ndEilute);
-    int paz;
-    while(ss>>paz){
-        if(paz==0) break;
-        s.nd.push_back(paz);
+    cout<<"Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
+    while(true){
+        getline(cin, eilute);
+        if(eilute.empty()) break;
+        s.nd.push_back(stoi(eilute));
     }
 
 cout<<"Įveskite egzamino rezultatą:";
