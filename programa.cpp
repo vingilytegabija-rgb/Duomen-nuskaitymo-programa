@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ cout<< endl;
 cout<< left<< setw(12) <<"Vardas"
      << setw(12) <<"Pavardė"
      << setw(20) <<"Galutinis(Vid.)"<<endl;
-cout << "---------------------------------------------" << endl
+cout << "---------------------------------------------" << endl;
 
 cout<<left<<setw(12)<<s.vardas
     <<setw(12)<<s.pavarde
