@@ -134,8 +134,8 @@ visiStudentai.push_back(s);
      return a.vardas < b.vardas;
       });
 cout<< "\nRezultatai:\n";
-cout<< left<< setw(12) <<"Vardas"
-     << setw(12) <<"Pavardė"
+cout<< left<< setw(15) <<"Vardas"
+     << setw(15) <<"Pavardė"
      << setw(20) <<"Galutinis(Vid.)"
      << setw(20) <<"Galutinis(Med.)"<<endl;
 cout << string(70, '-')<<endl;
@@ -143,8 +143,8 @@ cout << string(70, '-')<<endl;
 for (const Studentas &s : visiStudentai) {
     vector<int> viskas = s.nd;
     viskas.push_back(s.egz);
-    cout<<left<<setw(12)<<s.vardas
-    <<setw(12)<<s.pavarde
+    cout<<left<<setw(15)<<s.vardas
+    <<setw(15)<<s.pavarde
     <<setw(20) <<fixed<<setprecision(2)<<skaicVid(viskas)
     <<setw(20) <<fixed<<setprecision(2) <<skaicMediana(viskas)
     <<endl;
