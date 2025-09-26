@@ -141,12 +141,16 @@ cout << left<< setw(15) << "Vardas"
 cout << string(70, '-') << endl;
 
 for (const Studentas &s : visiStudentai) {
-    vector<int> viskas = s.nd;
-    viskas.push_back(s.egz);
+    double ndVid =skaicVid(s.nd);
+    double ndMed = skaicMediana(s.nd);
+
+    double galutinisVid = 0.4 * ndVid + 0.6 * s.egz;
+    double galutinisMed = 0.4 * ndMed + 0.6 * s.egz;
+    
     cout << left << setw(15) << s.vardas
     << setw(15) << s.pavarde
-    << setw(20) << fixed << setprecision(2) << skaicVid(viskas)
-    << setw(20) << fixed << setprecision(2) << skaicMediana(viskas)
+    << setw(20) << fixed << setprecision(2) << galutinisVid
+    << setw(20) << fixed << setprecision(2) << galutinisMed
     << endl;
 }
 return 0;
