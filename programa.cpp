@@ -171,7 +171,7 @@ visiStudentai.push_back(s);
       });
 
 vector<Studentas> vargsiukai;
-vecotr<Studentas> galvociai;
+vector<Studentas> galvociai;
     for (const Studentas& s: visiStudentai) {
         double ndVid =skaicVid(s.nd);
         double galutinisVid = 0.4*ndVid + 0.6*s.egz;
@@ -180,18 +180,29 @@ vecotr<Studentas> galvociai;
         else
             galvociai.push_back(s);
     }
-    auto spausdinti = [](const vector<Studentas>& grupe, const string& pavadinimas) {
-        cout << "\n=== " << pavadinimas << " ===\n";
+auto spausdinti = [](const vector<Studentas>& grupe, const string& pavadinimas) {
+            ofstream out(failoVardas);
+        if (!out) {
+            cerr << "Nepavyko sukurti failo: " << failoVardas << endl;
+            return;
+        }
+    
+cout << "\n=== " << pavadinimas << " ===\n";
 cout << left<< setw(15) << "Vardas"
      << setw(15) << "Pavardė"
      << setw(20) << "Galutinis(Vid.)"
      << setw(20) << "Galutinis(Med.)" << endl;
 cout << string(70, '-') << endl;
 
+out << left << setw(15) << "Vardas"
+    << setw(15) << "Pavardė"
+    << setw(20) << "Galutinis(Vid.)"
+    << setw(20) << "Galutinis(Med.)" << endl;
+out << string(70, '-') << endl;
+
 for (const Studentas &s : visiStudentai) {
     double ndVid =skaicVid(s.nd);
     double ndMed = skaicMediana(s.nd);
-
     double galutinisVid = 0.4 * ndVid + 0.6 * s.egz;
     double galutinisMed = 0.4 * ndMed + 0.6 * s.egz;
     
@@ -200,10 +211,19 @@ for (const Studentas &s : visiStudentai) {
     << setw(20) << fixed << setprecision(2) << galutinisVid
     << setw(20) << fixed << setprecision(2) << galutinisMed
     << endl;
+
+    out << left << setw(15) << s.vardas
+    << setw(15) << s.pavarde
+    << setw(20) << fixed << setprecision(2) << galutinisVid
+    << setw(20) << fixed << setprecision(2) << galutinisMed
+    << endl;
 }
-    }
-    spausdinti(vargsiukai, "Vargsiukai (galutinis vid. <5.0)");
-    spaudinti(galvociai, "Galvociai (galutinis vis >= 5.0)");
+out.close();
+cout <<"Duomenys irasyti i faila:"<<failoVardas<<endl;
+};
+        
+    spausdinti(vargsiukai, "Vargsiukai (galutinis vid. <5.0)", "vargsiukai.txt");
+    spaudinti(galvociai, "Galvociai (galutinis vis >= 5.0)", "galvociai.txt");
 return 0;
 }
 
