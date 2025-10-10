@@ -34,6 +34,34 @@ double skaicMediana(vector<int> pazymiai) {
         return pazymiai[n/2];
     }
 }
+
+Studentas generuotiStudenta(int i, int ndKiek){
+Studentas s;
+s.vardas ="Vardas" + to_string(id);
+s.pavarde = "Pavarde" + to_string(id);
+for (int i = 0; i< ndKiek; i++)
+    s.nd.push_back(rand()%11);
+s.egz = rand() % 11;
+return s;
+}
+
+void sugeneruotiFaila(int studentuKiekies, int ndKiek) {
+string failoVardas = "studentai_" + to_string(studentuKiekis) + ".txt";
+pfstream out(failoVardas);
+if(!out) {
+cerr << "Nepavyko sukurti failo:"<<failoVardas <<endl;
+return;
+}
+cout<<"Vardas Pavarde ND1 ND2 ND3 ... Egzaminas" <<endl;
+for (int i = 1; i<=studentuKiekis; i++) {
+Studentas s = sugeneruotiStudenta(i, ndKiek);
+out <<s.vardas<<""<<s.pavarde<<"";
+for (int balas :s.nd) out<<balas<<"";
+out <<s.egz<<endl;
+}
+out.close();
+cout<<"Failas"<<failoVardas<<"sukurtas su"<<studentuKiekis<< " įrašų.\n";
+}
     
 int main() {
     srand((unsigned)time(0));
@@ -43,10 +71,18 @@ int main() {
     cout<< "Pasirinkti duomenų įkelimo būdą:\n";
     cout<< "1. Įvesti studentų duomenis rankiniu būdu\n";
     cout<< "2. Nuskaityti studentų duomenis iš pasirinkto failo\n:";
+    cout<< "3. Sugeneruoti studentų sąrašų failus\n";
     cout<< "Jūsų pasirinkimas:";
     int veiksmas;
     cin >> veiksmas;
     cin.ignore();
+
+    if (veiksmas==3){
+        vector<int> kiekiai={1000, 10000, 100000, 1000000, 10000000};
+        int ndKiek= 5;
+        for (int k : kiekiai) {
+            sugeneruotiFaila(k, ndKiek);
+        }
 
     if(veiksmas == 2) {
         string failoVardas;
