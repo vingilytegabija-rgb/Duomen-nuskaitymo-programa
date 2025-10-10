@@ -169,7 +169,19 @@ visiStudentai.push_back(s);
         return a.pavarde < b.pavarde;  
      return a.vardas < b.vardas;
       });
-cout << "\nRezultatai:\n";
+
+vector<Studentas> vargsiukai;
+vecotr<Studentas> galvociai;
+    for (const Studentas& s: visiStudentai) {
+        double ndVid =skaicVid(s.nd);
+        double galutinisVid = 0.4*ndVid + 0.6*s.egz;
+        if (galutinisVid< 5.0)
+            vargsiukai.push_back(s);
+        else
+            galvociai.push_back(s);
+    }
+    auto spausdinti = [](const vector<Studentas>& grupe, const string& pavadinimas) {
+        cout << "\n=== " << pavadinimas << " ===\n";
 cout << left<< setw(15) << "Vardas"
      << setw(15) << "Pavardė"
      << setw(20) << "Galutinis(Vid.)"
@@ -189,6 +201,9 @@ for (const Studentas &s : visiStudentai) {
     << setw(20) << fixed << setprecision(2) << galutinisMed
     << endl;
 }
+    }
+    spausdinti(vargsiukai, "Vargsiukai (galutinis vid. <5.0)");
+    spaudinti(galvociai, "Galvociai (galutinis vis >= 5.0)");
 return 0;
 }
 
