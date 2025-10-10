@@ -34,7 +34,7 @@ int main() {
 
 
     if (veiksmas == 3) {
-        vector<int> kiekiai = {1000, 10000, 100000};
+        vector<int> kiekiai = {1000, 10000, 100000, 1000000, 10000000};
         int ndKiek = 5;
 
         for (int k : kiekiai) {
