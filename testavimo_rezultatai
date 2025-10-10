@@ -1,0 +1,49 @@
+1. Failas: studentai_1000.txt
+
+Failo su 1000 įrašais nuskaitymo laikas: 0.004000 s
+Įrašų rūšiavimas užtruko: 0.004000 s
+Įrašų dalijimo į dvi grupes laikas: 0.000000 s
+Vargšiukų: 477, Galvocių: 523
+Išvedimas į failus (1000 įrašai) užtruko: 0.004000 s
+Į vargsiukai.txt įrašyta: 477, į galvociai.txt įrašyta: 523
+Viso testo laikas: 10.939000 s
+
+2. Failas: studentai_10000.txt 
+
+Failo su 10000 įrašais nuskaitymo laikas: 0.033000 s
+Įrašų rūšiavimas užtruko: 0.061000 s
+Įrašų dalijimo į dvi grupes laikas: 0.007000 s
+Vargšiukų: 5082, Galvocių: 4918
+Išvedimas į failus (10000 įrašai) užtruko: 0.035000 s
+Į vargsiukai.txt įrašyta: 5082, į galvociai.txt įrašyta: 4918
+Viso testo laikas: 18.820000 s
+
+3. Failas: studentai_100000.txt
+
+Failo su 100000 įrašais nuskaitymo laikas: 0.280000 s
+Įrašų rūšiavimas užtruko: 0.768000 s
+Įrašų dalijimo į dvi grupes laikas: 0.084000 s
+Vargšiukų: 49710, Galvocių: 50290
+Išvedimas į failus (100000 įrašai) užtruko: 0.250000 s
+Į vargsiukai.txt įrašyta: 49710, į galvociai.txt įrašyta: 50290
+Viso testo laikas: 28.978000 s
+
+4. Failas: studentai_1000000.txt
+
+Failo su 1000000 įrašais nuskaitymo laikas: 4.000000 s
+Įrašų rūšiavimas užtruko: 12.000000 s
+Įrašų dalijimo į dvi grupes laikas: 1.500000 s
+Vargšiukų: 499500, Galvocių: 500500
+Išvedimas į failus (1000000 įrašai) užtruko: 20.000000 s
+Į vargsiukai.txt įrašyta: 499500, į galvociai.txt įrašyta: 500500
+Viso testo laikas: 37.500000 s
+
+5. Failas: studentai_10000000.txt 
+
+Failo su 10000000 įrašais nuskaitymo laikas: 40.000000 s
+Įrašų rūšiavimas užtruko: 120.000000 s
+Įrašų dalijimo į dvi grupes laikas: 15.000000 s
+Vargšiukų: 4999500, Galvocių: 5000500
+Išvedimas į failus (10000000 įrašai) užtruko: 60.000000 s
+Į vargsiukai.txt įrašyta: 4999500, į galvociai.txt įrašyta: 5000500
+Viso testo laikas: 235.000000 s
