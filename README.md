@@ -63,3 +63,7 @@ Vector irasymas:  0.901 s
 Nuskaitymas: 1.08578 s
 List rusiavimas: 0.168152 s
 List irasymas:  1.06113 s
+
+DISKAS SSD
+ATMINTIS 16GB
+CPU AMD Ryzen 5 7530U
