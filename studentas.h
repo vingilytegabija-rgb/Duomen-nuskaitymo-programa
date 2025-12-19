@@ -1,18 +1,21 @@
 #ifndef STUDENTAS_H
+#d#ifndef STUDENTAS_H
 #define STUDENTAS_H
 
-#include <string>
+#include <iostream>
 #include <vector>
-using namespace std;
+#include <string>
 
 struct Studentas {
-    string vardas;
-    string pavarde;
-    vector<int> nd;
+    std::string vardas;
+    std::string pavarde;
+    std::vector<int> nd;
     int egz;
 };
 
-Studentas generuotiStudenta(int id, int ndKiek);
-void sugeneruotiFaila(int studentuKiekis, int ndKiek);
+double skaicVid(const std::vector<int>& pazymiai);
+double skaicMediana(std::vector<int> pazymiai);
+
+void generuotiFaila(std::string vardas, int kiekis);
 
 #endif
