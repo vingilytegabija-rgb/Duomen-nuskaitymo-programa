@@ -1,15 +1,12 @@
+#include "studentas.h"
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <cstdlib>
+#include <fstream>
 #include <ctime>
-#include <chrono>    
-#include "studentas.h"
-#include "skaiciavimai.h"
 
 using namespace std;
 
@@ -18,103 +15,112 @@ int main() {
     vector<Studentas> visiStudentai;
     string eilute;
 
-    cout << "Pasirinkti duomenų įkelimo būdą:\n";
-    cout << "1. Rankinis įvedimas\n";
-    cout << "2. Nuskaitymas iš failo\n";
-    cout << "3. Sugeneruoti failus\n";
-    cout << "Pasirinkimas: ";
+    cout << "Pasirinkite veiksma:\n";
+    cout << "1. Ivesti studentu duomenis rankiniu budu\n";
+    cout << "2. Nuskaityti studentu duomenis is pasirinkto failo\n";
+    cout << "3. Sugeneruoti 5 testinius failus (nuo 1 000 iki 10 000 000)\n";
+    cout << "Jusu pasirinkimas: ";
+    
     int veiksmas;
-    cin >> veiksmas;
+    if (!(cin >> veiksmas)) return 0;
     cin.ignore();
 
-
     if (veiksmas == 3) {
-        vector<int> kiekiai = {1000, 10000, 100000};
-        int ndKiek = 5;
-
-        for (int k : kiekiai) {
-            auto start = chrono::high_resolution_clock::now();
-
-            sugeneruotiFaila(k, ndKiek); // studentas.cpp funkcija
-
-            auto end = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
-            cout << "Failo generavimas (" << k << " studentų) uztruko: "
-                 << duration.count() << " ms\n";
+        vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
+        for (int d : dydziai) {
+            string fVardas = "studentai_" + to_string(d) + ".txt";
+            generuotiFaila(fVardas, d);
         }
+        cout << "\nVisi failai sukurti. Programa baigia darba.\n";
         return 0;
     }
 
-
     if (veiksmas == 2) {
         string failoVardas;
-        cout << "Iveskite failo pavadinima: ";
-        cin.ignore();
+        cout << "Iveskite norimo failo pavadinima (pvz., studentai_1000.txt): ";
         getline(cin, failoVardas);
 
-        auto startRead = chrono::high_resolution_clock::now();
-
         ifstream in(failoVardas);
-        if (!in) { cerr << "Nepavyko atidaryti failo.\n"; return 1; }
+        if (!in) {
+            cerr << "Nepavyko atidaryti failo!" << endl;
+            return 1;
+        }
 
-        getline(in, eilute); // ignoruojam header
+        getline(in, eilute); // Praleidžiame antraštės eilutę
         while (getline(in, eilute)) {
             if (eilute.empty()) continue;
             stringstream ss(eilute);
             Studentas s;
             ss >> s.vardas >> s.pavarde;
-            vector<int> paz;
+
             int sk;
-            while (ss >> sk) paz.push_back(sk);
-            s.egz = paz.back(); paz.pop_back();
-            s.nd = paz;
-            visiStudentai.push_back(s);
+            while (ss >> sk) s.nd.push_back(sk);
+
+            if (!s.nd.empty()) {
+                s.egz = s.nd.back();
+                s.nd.pop_back();
+                visiStudentai.push_back(s);
+            }
         }
         in.close();
+    } 
+        
+    else if (veiksmas == 1) {
+        while (true) {
+            Studentas s;
+            cout << "\n--- Naujas studentas (tuscias vardas - pabaiga) ---\n";
+            cout << "Vardas: ";
+            getline(cin, s.vardas);
+            if (s.vardas.empty()) break;
 
-        auto endRead = chrono::high_resolution_clock::now();
-        auto durationRead = chrono::duration_cast<chrono::milliseconds>(endRead - startRead);
-        cout << "Duomenu nuskaitymas uztruko: " << durationRead.count() << " ms\n";
-    }
+            cout << "Pavarde: ";
+            getline(cin, s.pavarde);
 
-    auto startSort = chrono::high_resolution_clock::now();
-
-    vector<Studentas> vargsiukai;
-    vector<Studentas> galvociai;
-    for (const Studentas& s : visiStudentai) {
-        double galutinisVid = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
-        if (galutinisVid < 5.0) vargsiukai.push_back(s);
-        else galvociai.push_back(s);
-    }
-
-    auto endSort = chrono::high_resolution_clock::now();
-    auto durationSort = chrono::duration_cast<chrono::milliseconds>(endSort - startSort);
-    cout << "Studentu rusiuojimas uztruko: " << durationSort.count() << " ms\n";
-
-    auto startWrite = chrono::high_resolution_clock::now();
-
-    auto spausdintiIFaila = [](const vector<Studentas>& grupe, const string& failoVardas) {
-        ofstream out(failoVardas);
-        if (!out) { cerr << "Nepavyko sukurti failo: " << failoVardas << endl; return; }
-
-        out << "Vardas Pavarde Galutinis(Vid.) Galutinis(Med.)\n";
-        for (const Studentas& s : grupe) {
-            double ndVid = skaicVid(s.nd);
-            double ndMed = skaicMediana(s.nd);
-            double galutinisVid = 0.4*ndVid + 0.6*s.egz;
-            double galutinisMed = 0.4*ndMed + 0.6*s.egz;
-            out << s.vardas << " " << s.pavarde << " "
-                << galutinisVid << " " << galutinisMed << "\n";
+            cout << "Ar generuoti balus atsitiktinai? (y/n): ";
+            getline(cin, eilute);
+            
+            if (eilute == "y" || eilute == "Y") {
+                for (int i = 0; i < 5; i++) s.nd.push_back(rand() % 11);
+                s.egz = rand() % 11;
+            } else {
+                cout << "Iveskite ND (baigti - tuscia eilute):\n";
+                while (true) {
+                    getline(cin, eilute);
+                    if (eilute.empty()) break;
+                    s.nd.push_back(stoi(eilute));
+                }
+                cout << "Egzamino balas: ";
+                getline(cin, eilute);
+                s.egz = stoi(eilute);
+            }
+            visiStudentai.push_back(s);
         }
-    };
+    }
 
-    spausdintiIFaila(vargsiukai, "vargsiukai.txt");
-    spausdintiIFaila(galvociai, "galvociai.txt");
+    sort(visiStudentai.begin(), visiStudentai.end(), [](const Studentas &a, const Studentas &b) {
+        if (a.vardas != b.vardas) return a.vardas < b.vardas;
+        return a.pavarde < b.pavarde;
+    });
 
-    auto endWrite = chrono::high_resolution_clock::now();
-    auto durationWrite = chrono::duration_cast<chrono::milliseconds>(endWrite - startWrite);
-    cout << "Isvedimas i failus uztruko: " << durationWrite.count() << " ms\n";
+    if (!visiStudentai.empty()) {
+        cout << "\n" << left << setw(20) << "Vardas" << setw(20) << "Pavarde" 
+             << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+        cout << string(80, '-') << endl;
+
+        for (const auto &s : visiStudentai) {
+            double vid = skaicVid(s.nd);
+            double med = skaicMediana(s.nd);
+            
+            // Skaiciuojame galutini bala: 0.4 * ND + 0.6 * Egz
+            double galVid = 0.4 * vid + 0.6 * s.egz;
+            double galMed = 0.4 * med + 0.6 * s.egz;
+
+            cout << left << setw(20) << s.vardas 
+                 << setw(20) << s.pavarde 
+                 << setw(20) << fixed << setprecision(2) << galVid 
+                 << setw(20) << fixed << setprecision(2) << galMed << endl;
+        }
+    }
 
     return 0;
 }
-
