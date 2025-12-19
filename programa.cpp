@@ -5,8 +5,9 @@
 #include <iomanip>
 #include <algorithm>
 #include <cstdlib>
-#include<ctime>
-#include<fstream>
+#include <ctime>
+#include <fstream>
+#include <chrono> 
 
 using namespace std;
 
@@ -20,210 +21,158 @@ struct Studentas {
 double skaicVid(const vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0;
     int suma = 0;
-    for (int p : pazymiai) suma+= p;
-    return (double)suma/pazymiai.size();
+    for (int p : pazymiai) suma += p;
+    return (double)suma / pazymiai.size();
 }
 
 double skaicMediana(vector<int> pazymiai) {
     if (pazymiai.empty()) return 0;
     sort(pazymiai.begin(), pazymiai.end());
     int n = pazymiai.size();
-    if (n%2 == 0) {
-        return (pazymiai[n/2-1] +pazymiai[n/2]) / 2.0;
+    if (n % 2 == 0) {
+        return (pazymiai[n / 2 - 1] + pazymiai[n / 2]) / 2.0;
     } else {
-        return pazymiai[n/2];
+        return pazymiai[n / 2];
     }
 }
 
-Studentas generuotiStudenta(int i, int ndKiek){
-Studentas s;
-s.vardas ="Vardas" + to_string(id);
-s.pavarde = "Pavarde" + to_string(id);
-for (int i = 0; i< ndKiek; i++)
-    s.nd.push_back(rand()%11);
-s.egz = rand() % 11;
-return s;
+void generuotiFaila(string vardas, int kiekis) {
+    auto t1 = chrono::high_resolution_clock::now();
+    ofstream f(vardas);
+    
+    // Antraštė
+    f << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
+    for (int i = 1; i <= 15; i++) f << setw(5) << "ND" + to_string(i);
+    f << "Egzaminas" << endl;
+
+    for (int i = 1; i <= kiekis; i++) {
+        f << left << setw(20) << ("Vardas" + to_string(i))
+          << setw(20) << ("Pavarde" + to_string(i));
+        
+        for (int j = 0; j < 16; j++) {
+            f << setw(5) << rand() % 11;
+        }
+        f << endl;
+    }
+    f.close();
+    
+    auto t2 = chrono::high_resolution_clock::now();
+    chrono::duration<double> diff = t2 - t1;
+    cout << "Failas " << vardas << " sugeneruotas per " << diff.count() << " s.\n";
 }
 
-void sugeneruotiFaila(int studentuKiekies, int ndKiek) {
-string failoVardas = "studentai_" + to_string(studentuKiekis) + ".txt";
-pfstream out(failoVardas);
-if(!out) {
-cerr << "Nepavyko sukurti failo:"<<failoVardas <<endl;
-return;
-}
-cout<<"Vardas Pavarde ND1 ND2 ND3 ... Egzaminas" <<endl;
-for (int i = 1; i<=studentuKiekis; i++) {
-Studentas s = sugeneruotiStudenta(i, ndKiek);
-out <<s.vardas<<""<<s.pavarde<<"";
-for (int balas :s.nd) out<<balas<<"";
-out <<s.egz<<endl;
-}
-out.close();
-cout<<"Failas"<<failoVardas<<"sukurtas su"<<studentuKiekis<< " įrašų.\n";
-}
-    
 int main() {
     srand((unsigned)time(0));
     vector<Studentas> visiStudentai;
     string eilute;
 
-    cout<< "Pasirinkti duomenų įkelimo būdą:\n";
-    cout<< "1. Įvesti studentų duomenis rankiniu būdu\n";
-    cout<< "2. Nuskaityti studentų duomenis iš pasirinkto failo\n:";
-    cout<< "3. Sugeneruoti studentų sąrašų failus\n";
-    cout<< "Jūsų pasirinkimas:";
+    cout << "Pasirinkti veiksma:\n";
+    cout << "1. Ivesti studentu duomenis rankiniu budu\n";
+    cout << "2. Nuskaityti studentu duomenis is pasirinkto failo\n";
+    cout << "3. Sugeneruoti 5 testinius failus (nuo 1k iki 10mln)\n";
+    cout << "Jusu pasirinkimas: ";
     int veiksmas;
     cin >> veiksmas;
     cin.ignore();
 
-    if (veiksmas==3){
-        vector<int> kiekiai={1000, 10000, 100000, 1000000, 10000000};
-        int ndKiek= 5;
-        for (int k : kiekiai) {
-            sugeneruotiFaila(k, ndKiek);
+    if (veiksmas == 3) {
+        vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
+        for (int d : dydziai) {
+            string fVardas = "studentai_" + to_string(d) + ".txt";
+            generuotiFaila(fVardas, d);
         }
+        cout << "\nVisi failai sukurti sekmingai.\n";
+        return 0; // Baigiame darbą po generavimo
+    }
 
-    if(veiksmas == 2) {
+    if (veiksmas == 2) {
         string failoVardas;
-        cout << "Įveskite norimo failo pavadinimą:";
+        cout << "Iveskite norimo failo pavadinima: ";
         getline(cin, failoVardas);
 
         ifstream in(failoVardas);
         if (!in) {
-            cerr << "Nepavyko atidaryti failo:" << failoVardas << endl;
+            cerr << "Nepavyko atidaryti failo: " << failoVardas << endl;
             return 1;
         }
 
-    getline(in, eilute);
-        while(getline(in,eilute)) {
+        getline(in, eilute); // Praleidžiame antraštę
+        while (getline(in, eilute)) {
             if (eilute.empty()) continue;
-
             stringstream ss(eilute);
             Studentas s;
             ss >> s.vardas >> s.pavarde;
-            vector<int> paz;
+
             int sk;
+            vector<int> paz;
             while (ss >> sk) paz.push_back(sk);
 
-            if(paz.empty()) continue;
+            if (paz.empty()) continue;
 
             s.egz = paz.back();
             paz.pop_back();
             s.nd = paz;
-
             visiStudentai.push_back(s);
         }
         in.close();
-    }
-    else {
-    while(true) {
-        Studentas s;
-        cout << "\n---Naujas studentas ---\n";
-        cout << "Įveskite studento vardą (tuščia eilutė reiškia studentų sąrašo pabaigą):";
-        getline(cin, eilute);
-        if (eilute.empty()) break;
-        s.vardas = eilute;
-
-        cout << "Įveskite studento pavardę:";
-        getline(cin, s.pavarde);
-        
-        cout << "Pasirinkti balų įvedimo būdą:\n";
-        cout << "1. Įvesti balus rankiniu būdu\n";
-        cout << "2. Sugeneruoti balus atsitiktinai\n";
-        cout << "Jūsų pasirinkimas:";
-        getline(cin, eilute);
-
-        int pasirinkimas;
-        stringstream ss(eilute);
-        ss >> pasirinkimas;
-
-        if (pasirinkimas == 1) {
-            cout << "Įveskite namų darbų rezultatus(po kiekvieno paspausti enter, tuščias enter signalizuoja pabaigą):";
-            while(true) {
-                getline(cin, eilute);
-                if(eilute.empty()) break;
-                s.nd.push_back(stoi(eilute));
-       }
-cout << "Įveskite egzamino rezultatą:";
-getline(cin, eilute);
-s.egz = stoi(eilute);
-        }
-        else if (pasirinkimas == 2) {
-            cout << "Įveskite namų darbų kiekį:";
+    } else {
+        while (true) {
+            Studentas s;
+            cout << "\n--- Naujas studentas ---\n";
+            cout << "Iveskite studento varda (tuscia eilute - pabaiga): ";
             getline(cin, eilute);
-            int ndKiek = stoi(eilute);
-            for (int i = 0; i<ndKiek; i++)
-                s.nd.push_back(rand()%11);
-            s.egz =rand()%11;
+            if (eilute.empty()) break;
+            s.vardas = eilute;
+
+            cout << "Iveskite studento pavarde: ";
+            getline(cin, s.pavarde);
+
+            cout << "1. Rankinis ivedimas, 2. Atsitiktinis generavimas: ";
+            getline(cin, eilute);
+            int pasirinkimas = stoi(eilute);
+
+            if (pasirinkimas == 1) {
+                cout << "Iveskite ND rezultatus (tuscias enter - pabaiga):\n";
+                while (true) {
+                    getline(cin, eilute);
+                    if (eilute.empty()) break;
+                    s.nd.push_back(stoi(eilute));
+                }
+                cout << "Iveskite egzamino rezultata: ";
+                getline(cin, eilute);
+                s.egz = stoi(eilute);
+            } else {
+                cout << "Kiek ND sugeneruoti? ";
+                getline(cin, eilute);
+                int ndKiek = stoi(eilute);
+                for (int i = 0; i < ndKiek; i++) s.nd.push_back(rand() % 11);
+                s.egz = rand() % 11;
+            }
+            visiStudentai.push_back(s);
         }
-        else {
-            cout << "Netinkamas pasirinkimas. Studentas nebus įtrauktas";
-            continue;
-        }
-visiStudentai.push_back(s);
     }
-}
- sort(visiStudentai.begin(), visiStudentai.end(), [](const Studentas &a, const Studentas &b) {
-     if (a.vardas == b.vardas)
-        return a.pavarde < b.pavarde;  
-     return a.vardas < b.vardas;
-      });
 
-vector<Studentas> vargsiukai;
-vector<Studentas> galvociai;
-    for (const Studentas& s: visiStudentai) {
-        double ndVid =skaicVid(s.nd);
-        double galutinisVid = 0.4*ndVid + 0.6*s.egz;
-        if (galutinisVid< 5.0)
-            vargsiukai.push_back(s);
-        else
-            galvociai.push_back(s);
+    // Rūšiavimas
+    sort(visiStudentai.begin(), visiStudentai.end(), [](const Studentas &a, const Studentas &b) {
+        if (a.vardas != b.vardas) return a.vardas < b.vardas;
+        return a.pavarde < b.pavarde;
+    });
+
+    // Rezultatų išvedimas
+    cout << "\nRezultatai:\n";
+    cout << left << setw(20) << "Vardas" << setw(20) << "Pavarde"
+         << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    cout << string(80, '-') << endl;
+
+    for (const Studentas &s : visiStudentai) {
+        vector<int> viskas = s.nd;
+        viskas.push_back(s.egz);
+        cout << left << setw(20) << s.vardas << setw(20) << s.pavarde
+             << setw(20) << fixed << setprecision(2) << (skaicVid(s.nd) * 0.4 + s.egz * 0.6)
+             << setw(20) << fixed << setprecision(2) << (skaicMediana(s.nd) * 0.4 + s.egz * 0.6)
+             << endl;
     }
-auto spausdinti = [](const vector<Studentas>& grupe, const string& pavadinimas) {
-            ofstream out(failoVardas);
-        if (!out) {
-            cerr << "Nepavyko sukurti failo: " << failoVardas << endl;
-            return;
-        }
-    
-cout << "\n=== " << pavadinimas << " ===\n";
-cout << left<< setw(15) << "Vardas"
-     << setw(15) << "Pavardė"
-     << setw(20) << "Galutinis(Vid.)"
-     << setw(20) << "Galutinis(Med.)" << endl;
-cout << string(70, '-') << endl;
 
-out << left << setw(15) << "Vardas"
-    << setw(15) << "Pavardė"
-    << setw(20) << "Galutinis(Vid.)"
-    << setw(20) << "Galutinis(Med.)" << endl;
-out << string(70, '-') << endl;
-
-for (const Studentas &s : visiStudentai) {
-    double ndVid =skaicVid(s.nd);
-    double ndMed = skaicMediana(s.nd);
-    double galutinisVid = 0.4 * ndVid + 0.6 * s.egz;
-    double galutinisMed = 0.4 * ndMed + 0.6 * s.egz;
-    
-    cout << left << setw(15) << s.vardas
-    << setw(15) << s.pavarde
-    << setw(20) << fixed << setprecision(2) << galutinisVid
-    << setw(20) << fixed << setprecision(2) << galutinisMed
-    << endl;
-
-    out << left << setw(15) << s.vardas
-    << setw(15) << s.pavarde
-    << setw(20) << fixed << setprecision(2) << galutinisVid
-    << setw(20) << fixed << setprecision(2) << galutinisMed
-    << endl;
-}
-out.close();
-cout <<"Duomenys irasyti i faila:"<<failoVardas<<endl;
-};
-        
-    spausdinti(vargsiukai, "Vargsiukai (galutinis vid. <5.0)", "vargsiukai.txt");
-    spaudinti(galvociai, "Galvociai (galutinis vis >= 5.0)", "galvociai.txt");
-return 0;
+    return 0;
 }
 
