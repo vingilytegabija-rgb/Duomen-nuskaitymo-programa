@@ -12,6 +12,29 @@
 
 using namespace std;
 
+// Pagalbinė funkcija duomenų nuskaitymui testavimui
+void nuskaitytiIsFailo(string failoVardas, vector<Studentas>& studentai) {
+    ifstream in(failoVardas);
+    if (!in) {
+        cout << "Klaida: nepavyko rasti failo " << failoVardas << endl;
+        return;
+    }
+    studentai.clear();
+    string eilute;
+    getline(in, eilute); // Praleidžiam antraštę
+    while (getline(in, eilute)) {
+        istringstream iss(eilute);
+        Studentas s;
+        iss >> s.vardas >> s.pavarde;
+        int p;
+        while (iss >> p) s.nd.push_back(p);
+        s.egz = s.nd.back();
+        s.nd.pop_back();
+        s.galutinis = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
+        studentai.push_back(s);
+    }
+}
+
 int main() {
     srand((unsigned)time(0));
     vector<Studentas> visiStudentai;
@@ -79,5 +102,41 @@ int main() {
         }
         else if (veiksmas == 4) {
             // v1.0 Strategijų testavimas
-            string fv = "studentai_100000.txt"; // Testuojame su 100k
-            cout << "\n--- Strategiju lyginimas su "
+            cout << "Iveskite duomenu kieki testui (pvz. 100000): ";
+            int n;
+            cin >> n;
+            string fv = "studentai_" + to_string(n) + ".txt";
+            
+            vector<Studentas> studentai;
+            nuskaitytiIsFailo(fv, studentai);
+
+            if (studentai.empty()) continue;
+
+            cout << "\nPasirinkite strategija (1, 2, 3): ";
+            int strat;
+            cin >> strat;
+
+            vector<Studentas> vargsiukai;
+            auto start = chrono::high_resolution_clock::now();
+
+            if (strat == 1) {
+                vector<Studentas> kietiakai;
+                strategija1(studentai, vargsiukai, kietiakai);
+                cout << "Naudojama 1 strategija (Kopijavimas i du naujus).\n";
+            } 
+            else if (strat == 2) {
+                strategija2(studentai, vargsiukai);
+                cout << "Naudojama 2 strategija (Trynimas is vektoriaus).\n";
+            } 
+            else if (strat == 3) {
+                strategija3(studentai, vargsiukai);
+                cout << "Naudojama 3 strategija (stable_partition).\n";
+            }
+
+            auto end = chrono::high_resolution_clock::now();
+            chrono::duration<double> diff = end - start;
+            cout << "Skaidymas uztruko: " << diff.count() << " s\n";
+        }
+    }
+    return 0;
+}
