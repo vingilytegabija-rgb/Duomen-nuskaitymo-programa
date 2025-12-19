@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <ctime>
 #include <fstream>
+#include <chrono>
 
 using namespace std;
 
@@ -20,7 +21,8 @@ int main() {
         cout << "\n====================================================\n";
         cout << "1. Ivesti studentus ranka (RODYTI ADRESUS)\n";
         cout << "2. Generuoti failus testavimui\n";
-        cout << "3. Atlikti VECTOR ir LIST spartos analize\n";
+        cout << "3. Atlikti VECTOR ir LIST spartos analize (v0.3)\n";
+        cout << "4. TESTUOTI SKIRSTYMO STRATEGIJAS (v1.0)\n";
         cout << "0. Baigti darba\n";
         cout << "====================================================\n";
         cout << "Pasirinkimas: ";
@@ -42,7 +44,6 @@ int main() {
                 cout << "Pavarde: ";
                 getline(cin, s.pavarde);
                 
-                // Atsitiktinis ND generavimas greitam testui
                 for (int i = 0; i < 5; i++) s.nd.push_back(rand() % 11);
                 s.egz = rand() % 11;
                 s.galutinis = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
@@ -57,7 +58,7 @@ int main() {
                 for (auto &st : visiStudentai) {
                     cout << left << setw(15) << st.vardas 
                          << setw(15) << st.pavarde 
-                         << &st << endl; // ISVEDAMAS ADRESAS
+                         << &st << endl; 
                 }
             }
         } 
@@ -76,6 +77,7 @@ int main() {
                 matuotiSpartaList(fv);
             }
         }
-    }
-    return 0;
-}
+        else if (veiksmas == 4) {
+            // v1.0 Strategijų testavimas
+            string fv = "studentai_100000.txt"; // Testuojame su 100k
+            cout << "\n--- Strategiju lyginimas su "
