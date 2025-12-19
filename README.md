@@ -23,17 +23,43 @@ Atlikus testavimą su duomenų kiekiais nuo 1 tūkst. iki 10 mln. įrašų, gali
 
 
 Spartos testavimas po antro karto:
-std::vector spartos analizė:
-Įrašų kiekis,Nuskaitymas (s),Rūšiavimas (s),Išvedimas (s),Bendra trukmė (s)
-1 000,0.0016,0.0002,0.0023,0.0041
-10 000,0.0245,0.0019,0.0307,0.0571
-100 000,0.1384,0.0151,0.1350,0.2885
-1 000 000,1.0914,0.1556,0.9010,2.1480
 
+--- VECTOR Analize (studentai_1000.txt) ---
+Nuskaitymas: 0.0015511 s
+Vector rusiavimas: 0.0001625 s
+Vector irasymas:  0.0023045 s
 
-std::list spartos analizė:
-Įrašų kiekis,Nuskaitymas (s),Rūšiavimas (s),Išvedimas (s),Bendra trukmė (s)
-1 000,0.0026,0.0003,0.0044,0.0073
-10 000,0.0189,0.0023,0.0137,0.0349
-100 000,0.1182,0.0158,0.0948,0.2288
-1 000 000,1.0858,0.1682,1.0611,2.3151
+--- LIST Analize (studentai_1000.txt) ---
+Nuskaitymas: 0.0026068 s
+List rusiavimas: 0.0002797 s
+List irasymas:  0.0043995 s
+
+--- VECTOR Analize (studentai_10000.txt) ---
+Nuskaitymas: 0.0244796 s
+Vector rusiavimas: 0.0018897 s
+Vector irasymas:  0.0306666 s
+
+--- LIST Analize (studentai_10000.txt) ---
+Nuskaitymas: 0.0189401 s
+List rusiavimas: 0.0023373 s
+List irasymas:  0.0137395 s
+
+--- VECTOR Analize (studentai_100000.txt) ---
+Nuskaitymas: 0.138421 s
+Vector rusiavimas: 0.0150951 s
+Vector irasymas:  0.135042 s
+
+--- LIST Analize (studentai_100000.txt) ---
+Nuskaitymas: 0.118248 s
+List rusiavimas: 0.0158043 s
+List irasymas:  0.0948206 s
+
+--- VECTOR Analize (studentai_1000000.txt) ---
+Nuskaitymas: 1.09136 s
+Vector rusiavimas: 0.155575 s
+Vector irasymas:  0.901 s
+
+--- LIST Analize (studentai_1000000.txt) ---
+Nuskaitymas: 1.08578 s
+List rusiavimas: 0.168152 s
+List irasymas:  1.06113 s
