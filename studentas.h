@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include <string>
 
 struct Studentas {
@@ -16,7 +17,8 @@ struct Studentas {
 double skaicVid(const std::vector<int>& pazymiai);
 double skaicMediana(std::vector<int> pazymiai);
 void generuotiFaila(std::string vardas, int kiekis);
-void matuotiSparta(std::string failoVardas);
-void rusiuotiIrIrasyti(std::vector<Studentas>& visi, std::string failoVardas);
+
+void matuotiSpartaVector(std::string failoVardas);
+void matuotiSpartaList(std::string failoVardas);
 
 #endif
