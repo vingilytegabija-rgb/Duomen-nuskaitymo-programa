@@ -83,3 +83,33 @@ void matuotiSpartaVector(string failoVardas) {
     
     rusiuotiIrIrasyti(visi, failoVardas, "Vector");
 }
+void matuotiSpartaList(string failoVardas) {
+    auto s1 = high_resolution_clock::now();
+    list<Studentas> visi;
+    ifstream in(failoVardas);
+    if (!in) return;
+
+    string eilute;
+    getline(in, eilute);
+    while (getline(in, eilute)) {
+        stringstream ss(eilute);
+        Studentas s;
+        ss >> s.vardas >> s.pavarde;
+        int p;
+        while (ss >> p) s.nd.push_back(p);
+        
+        if (!s.nd.empty()) {
+            s.egz = s.nd.back();
+            s.nd.pop_back();
+            s.galutinis = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
+            visi.push_back(s);
+        }
+    }
+    in.close();
+    auto e1 = high_resolution_clock::now();
+
+    cout << "\n--- LIST Analize (" << failoVardas << ") ---\n";
+    cout << "Nuskaitymas: " << duration<double>(e1 - s1).count() << " s\n";
+    
+    rusiuotiIrIrasyti(visi, failoVardas, "List");
+}
