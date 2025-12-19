@@ -8,6 +8,7 @@ double skaicVid(const std::vector<int>& pazymiai) {
     return suma / (double)pazymiai.size();
 }
 
+
 double skaicMediana(std::vector<int> pazymiai) {
     if (pazymiai.empty()) return 0;
     std::sort(pazymiai.begin(), pazymiai.end());
