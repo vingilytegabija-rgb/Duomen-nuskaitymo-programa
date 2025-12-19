@@ -1,11 +1,11 @@
 #include "studentas.h"
 #include <algorithm>
+#include <numeric>
 
 double skaicVid(const std::vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0;
-    int suma = 0;
-    for (int p : pazymiai) suma += p;
-    return (double)suma / pazymiai.size();
+    double suma = std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0);
+    return suma / (double)pazymiai.size();
 }
 
 double skaicMediana(std::vector<int> pazymiai) {
