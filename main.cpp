@@ -1,6 +1,7 @@
 #include "studentas.h"
 #include <iostream>
 #include <vector>
+#include <list>
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -17,10 +18,9 @@ int main() {
 
     while (true) {
         cout << "\n====================================================\n";
-        cout << "1. Ivesti studentu duomenis rankiniu budu\n";
-        cout << "2. Nuskaityti studentu duomenis is pasirinkto failo\n";
-        cout << "3. Sugeneruoti 5 testinius failus\n";
-        cout << "4. Atlikti sugeneruotu failu SPARTOS ANALIZE\n";
+        cout << "1. Ivesti studentus ranka (RODYTI ADRESUS)\n";
+        cout << "2. Generuoti failus testavimui\n";
+        cout << "3. Atlikti VECTOR ir LIST spartos analize\n";
         cout << "0. Baigti darba\n";
         cout << "====================================================\n";
         cout << "Pasirinkimas: ";
@@ -32,6 +32,7 @@ int main() {
         if (veiksmas == 0) break;
 
         if (veiksmas == 1) {
+            visiStudentai.clear();
             while (true) {
                 Studentas s;
                 cout << "Vardas (tuscia - pabaiga): ";
@@ -40,58 +41,40 @@ int main() {
                 s.vardas = eilute;
                 cout << "Pavarde: ";
                 getline(cin, s.pavarde);
-                cout << "1. Rankinis, 2. Atsitiktinis: ";
-                getline(cin, eilute);
-                if (eilute == "2") {
-                    for (int i = 0; i < 5; i++) s.nd.push_back(rand() % 11);
-                    s.egz = rand() % 11;
-                } else {
-                    cout << "Iveskite ND (tuscia - pabaiga): ";
-                    while (true) {
-                        getline(cin, eilute);
-                        if (eilute.empty()) break;
-                        s.nd.push_back(stoi(eilute));
-                    }
-                    cout << "Egzaminas: ";
-                    getline(cin, eilute);
-                    s.egz = stoi(eilute);
-                }
+                
+                // Atsitiktinis ND generavimas greitam testui
+                for (int i = 0; i < 5; i++) s.nd.push_back(rand() % 11);
+                s.egz = rand() % 11;
                 s.galutinis = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
+                
                 visiStudentai.push_back(s);
             }
-            if (!visiStudentai.empty()) rusiuotiIrIrasyti(visiStudentai, "is_rankinio_ivedimo.txt");
+            
+            if (!visiStudentai.empty()) {
+                cout << "\n--- Studentu adresai atmintyje (Vector) ---\n";
+                cout << left << setw(15) << "Vardas" << setw(15) << "Pavarde" << "Atminties adresas\n";
+                cout << "----------------------------------------------------\n";
+                for (auto &st : visiStudentai) {
+                    cout << left << setw(15) << st.vardas 
+                         << setw(15) << st.pavarde 
+                         << &st << endl; // ISVEDAMAS ADRESAS
+                }
+            }
         } 
         else if (veiksmas == 2) {
-            string fv;
-            cout << "Failo pavadinimas: ";
-            getline(cin, fv);
-            ifstream in(fv);
-            if (in) {
-                getline(in, eilute);
-                while (getline(in, eilute)) {
-                    stringstream ss(eilute);
-                    Studentas s;
-                    ss >> s.vardas >> s.pavarde;
-                    int sk;
-                    while (ss >> sk) s.nd.push_back(sk);
-                    if (!s.nd.empty()) {
-                        s.egz = s.nd.back();
-                        s.nd.pop_back();
-                        s.galutinis = 0.4 * skaicVid(s.nd) + 0.6 * s.egz;
-                        visiStudentai.push_back(s);
-                    }
-                }
-                in.close();
-                rusiuotiIrIrasyti(visiStudentai, fv);
+            vector<int> dydziai = {1000, 10000, 100000, 1000000};
+            for (int d : dydziai) {
+                generuotiFaila("studentai_" + to_string(d) + ".txt", d);
             }
+            cout << "\nFailai sugeneruoti sekmingai.\n";
         }
         else if (veiksmas == 3) {
-            vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
-            for (int d : dydziai) generuotiFaila("studentai_" + to_string(d) + ".txt", d);
-        }
-        else if (veiksmas == 4) {
-            vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
-            for (int d : dydziai) matuotiSparta("studentai_" + to_string(d) + ".txt");
+            vector<int> dydziai = {1000, 10000, 100000, 1000000};
+            for (int d : dydziai) {
+                string fv = "studentai_" + to_string(d) + ".txt";
+                matuotiSpartaVector(fv);
+                matuotiSpartaList(fv);
+            }
         }
     }
     return 0;
